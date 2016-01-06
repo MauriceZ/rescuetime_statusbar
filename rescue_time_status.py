@@ -2,6 +2,7 @@ import rumps
 import urllib2
 import json
 import webbrowser
+import config
 
 class RescueTimeStatus(rumps.App):
   def __init__(self):
@@ -14,7 +15,7 @@ class RescueTimeStatus(rumps.App):
     self.update_stats()
 
   def update_stats(self):
-    data = urllib2.urlopen("https://www.rescuetime.com/anapi/data/?rs=day&format=json&key=B63SVy_FSp7iDJCTfniTjitbQrUcUwZhzaShpERO&rk=efficiency&pv=interval").read()
+    data = urllib2.urlopen("https://www.rescuetime.com/anapi/data/?rs=day&format=json&key={}&rk=efficiency&pv=interval".format(config.key)).read()
     data = json.loads(data)
 
     prod_pulse = str(int(round(data['rows'][0][4])))
