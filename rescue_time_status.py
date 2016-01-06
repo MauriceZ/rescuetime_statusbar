@@ -6,7 +6,7 @@ import webbrowser
 class RescueTimeStatus(rumps.App):
   def __init__(self):
     super(RescueTimeStatus, self).__init__("RescueTime Productivity")
-    self.menu = ["Details", None]
+    self.menu = ["Logged", "Details", None]
     self.update_stats()
 
   @rumps.timer(54000) # 15 minutes
@@ -21,10 +21,16 @@ class RescueTimeStatus(rumps.App):
     time_logged = data['rows'][0][1]
 
     self.title = prod_pulse
+    self.menu['Logged'].title = seconds_to_datestr(time_logged)
 
   @rumps.clicked("Details")
   def go_to_dashboard(self):
     webbrowser.open_new("https://www.rescuetime.com/dashboard")
+
+def seconds_to_datestr(seconds):
+  m, s = divmod(seconds, 60)
+  h, m = divmod(m, 60)
+  return "%d:%02d:%02d" % (h, m, s)
 
 if __name__ == "__main__":
   RescueTimeStatus().run()
