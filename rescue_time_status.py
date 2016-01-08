@@ -10,12 +10,16 @@ class RescueTimeStatus(rumps.App):
     self.menu = ["Logged", "Details", None]
     self.update_stats()
 
-  @rumps.timer(54000) # 15 minutes
+  @rumps.timer(300) # 5 minutes
   def peridioc_update(self, sender):
     self.update_stats()
 
   def update_stats(self):
-    data = urllib2.urlopen("https://www.rescuetime.com/anapi/data/?rs=day&format=json&key={}&rk=efficiency&pv=interval".format(config.key)).read()
+    try:
+      data = urllib2.urlopen("https://www.rescuetime.com/anapi/data/?rs=day&format=json&key={}&rk=efficiency&pv=interval".format(config.key)).read()
+    except Exception:
+      return
+
     data = json.loads(data)
 
     prod_pulse = str(int(round(data['rows'][0][4])))
